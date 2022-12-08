@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Przykładowy program</title>
+    </head>
+    <body>
+        <p>Podaj imię:</p>
+        <input type="text" id="nameId"/>
+        <p>Podaj wiek</p>
+        <input type="text" id="ageId"/>
+        <p>Podaj wzrost</p>
+        <input type="text" id="heightId"/>
+        <br/><br/>
+        <input type="button" value="Wyświetl informację" onclick="getInfo()"/>
+        <br/><br/>
+        <div id="helloId">Tutaj po naciśnięciu przycisku ma pojawić się:
+            * jesli walidacja przejdzie poprawnie:
+                "Witaj 'imie' na stronie" - gdzie 'imie' jest to wartość z pola wprowadzanego
+            * jeśli walidacja nie przejdzie poprawnie:
+                to powinien znaleść się odpowiedni komunikat informujący co jest nie tak
+        </div>
+        <div id="legalAgeId">
+            Tutaj po naciśnięciu przycisku ma pojawić się:
+            * jesli walidacja przejdzie poprawnie:
+                "Jesteś pełnoletni/niepełnoletni" - w zależności od wieku
+            * jeśli walidacja nie przejdzie poprawnie: 
+                nic
+        </div>
+        <div id="heightNumberId"></div>
+        <br/>
+        <div>Zasady:<br/>
+        * Poprawne formatowanie kodu<br/>
+        * Czytelność identyfikatorów<br/>
+        * DRY - don't repeat yourself<br/>
+        * KISS - Keep it simple stupid<br/>
+        * YAGNI - You aren't gonna need it<br/>
+        * SOLID - S - Single responsibility principle <br/>
+        </div>
+        <script>
+          let returnBox;
+
+            function getInfo()
+            {
+                
+                if (Validate())
+                {
+                showInfo();
+                }
+                else
+                {
+                showError(); 
+                }
+            }
+
+            function showInfo()
+            { 
+                let nameBox = document.getElementById("nameId");
+                document.getElementById("helloId").innerHTML = "Witaj " + nameBox.value + " na stronie.";
+
+                let ageBox = document.getElementById("ageId");
+                document.getElementById("legalAgeId").innerHTML=convertAgeToMajority(ageBox.value);
+
+                let heightBox = document.getElementById("heightId");
+                document.getElementById("heightNumberId").innerHTML = "Wzrost: " + heightBox.value + "cm";
+            }
+
+            function convertAgeToMajority(text)
+            {
+                return parseInt(text) > 17 ? "Jesteś pełnoletni":"Jesteś niepełnoletni";
+            }
+
+            function showError()
+            {
+                document.getElementById("helloId").innerHTML = returnBox;
+                document.getElementById("legalAgeId").innerHTML="";
+                document.getElementById("heightNumberId").innerHTML="";
+            }
+
+            function Validate()
+            {
+            return  (VName()&&VAge()&&VHeight());
+            }
+
+            function VName()
+            {
+                if (VIsEmpty(document.getElementById("nameId").value))
+                {
+                    returnBox = "Imię: " + returnBox;
+                    return false;
+                }
+                return true;
+            }
+            function VHeight()
+            {
+                if (VIsEmpty(document.getElementById("heightId").value)||
+                VIsNotNumber(document.getElementById("heightId").value||
+                !VIsInRange(document.getElementById("heightId").value, 100, 250)))
+                {
+                    returnBox = "Wzrost: " + returnBox;
+                    return false;
+                }
+                return true;
+            }
+
+            function VAge()
+            {
+                if (VIsEmpty(document.getElementById("ageId").value)||
+                VIsNotNumber(document.getElementById("ageId").value)||
+                !VIsInRange(document.getElementById("ageId").value, 1, 130))
+                {
+                    returnBox = "Wiek: " + returnBox;
+                    return false;
+                }
+                return true;
+            }
+            function VIsEmpty(text)
+            {
+                if (text == undefined || text == "")
+                {
+                    returnBox = "Nic nie wpisano";
+                    return true;
+                }
+                return false;
+            }
+
+            function VIsNotNumber(text)
+            {
+                if (isNaN(parseInt(text)))
+                {
+                    returnBox="Nie jest liczbą";
+                    return true;
+                }
+                return false;
+            }
+
+            function VIsInRange(text, min,max)
+            {
+                if (parseInt(text) < min || parseInt(text) > max)
+                {
+                    returnBox="Spoza zakresu <" + min + " ; " + max + ">";
+                    return false;
+                }
+                return true;
+            }
+   
+        </script>
+    </body>
+</html>
